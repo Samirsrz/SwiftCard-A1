@@ -4,7 +4,7 @@ navLinks.forEach(link => {
   link.classList.remove('bg-violet-100', 'text-violet-700', 'font-bold');
 });
 
-const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+const currentPage = window.location.pathname.split('/').pop() || 'product.html';
 
 navLinks.forEach(link => {
   const linkHref = link.getAttribute('href');
@@ -14,7 +14,9 @@ navLinks.forEach(link => {
   }
 });
 
-console.log("THis is from JS");
+
+
+
 
 const loadProducts = async()=>{
     const url="https://fakestoreapi.com/products"
@@ -42,15 +44,12 @@ loadProducts()
 
 const displayTrends=(products)=>{
     console.log(products);
-   const trendContainer = document.getElementById("trend-section")
+   const trendContainer = document.getElementById("our-product")
    trendContainer.innerHTML=""
 
-   // Sort by rating and take top 3
-   const topProducts = products
-     .sort((a, b) => b.rating.rate - a.rating.rate)
-     .slice(0, 3);
+  
 
-   for(let product of topProducts){
+   for(let product of products){
      const div = document.createElement("div")
      div.innerHTML=`
     <div class="card bg-base-700 w-96 h-[600px] shadow-sm">
@@ -88,7 +87,33 @@ const displayTrends=(products)=>{
     
 }
 
+const loadCategory=async()=>{
+    const url= "https://fakestoreapi.com/products/categories"
+    const res=await fetch(url);
+    const categories=await res.json();
+    console.log(categories);
+    displayCategory(categories)
+}
+loadCategory()
+
+const displayCategory = (categories) => {
+    const categoryContainer = document.getElementById("category-container");
+    categoryContainer.innerHTML = `
+        <button class="btn btn-primary">All</button>
+    `;
+    
+    categories.forEach(category => {
+        const button = document.createElement("button");
+        button.setAttribute("onclick", `filterByCategory("${category}")`);
+        button.className = "btn btn-outline";
+        button.textContent = category;
+        categoryContainer.appendChild(button);
+    });
+}
 
 
 
 
+const filterByCategory=(category)=>{
+    console.log("this is category", category);
+}
