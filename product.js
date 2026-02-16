@@ -4,21 +4,26 @@ navLinks.forEach(link => {
   link.classList.remove('bg-violet-100', 'text-violet-700', 'font-bold');
 });
 
-const currentPage = window.location.pathname.split('/').pop() || 'product.html';
 
-navLinks.forEach(link => {
-  const linkHref = link.getAttribute('href');
-  
-  if (linkHref === currentPage) {
-    link.classList.add('bg-violet-100', 'text-violet-700', 'font-bold');
-  }
+const homeLinks = document.querySelectorAll('a[href="product.html"]');
+homeLinks.forEach(link => {
+  link.classList.add('bg-violet-100', 'text-violet-700', 'font-bold');
 });
 
-
+const loadingSpinner=(status)=>{
+    if(status==true){
+    document.getElementById("spinner").classList.remove("hidden")
+    document.getElementById("our-product").classList.add("hidden")
+  }else{
+       document.getElementById("our-product").classList.remove("hidden")
+    document.getElementById("spinner").classList.add("hidden")
+  }
+}
 
 
 
 const loadProducts = async()=>{
+  loadingSpinner(true);
     const url="https://fakestoreapi.com/products"
     const res=await fetch(url);
     const products= await res.json();
@@ -71,7 +76,7 @@ const displayTrends=(products)=>{
 
      trendContainer.append(div)
    }
-    
+    loadingSpinner(false)
 }
 
 const loadCategory=async()=>{
@@ -98,12 +103,28 @@ const displayCategory = (categories) => {
     });
 }
 
+const setActiveButton = (clickedCategory) => {
 
+    const allButtons = document.querySelectorAll('#category-container button');
+    allButtons.forEach(button => {
+        button.classList.remove('btn-primary');
+        button.classList.add('btn-outline');
+    });
+    allButtons.forEach(button => {
+        if(button.textContent === clickedCategory || 
+           (clickedCategory === 'all' && button.textContent === 'All')) {
+            button.classList.remove('btn-outline');
+            button.classList.add('btn-primary');
+        }
+    });
+  
+}
 
 
 const filterByCategory=async(category)=>{
     // DO fetch using thi categroy dynamically
-
+    loadingSpinner(true)
+    setActiveButton(category)
     let url;
      if(category=='all'){
       url=`https://fakestoreapi.com/products`
@@ -114,7 +135,7 @@ const filterByCategory=async(category)=>{
     }
 
 
-     
+
     const res = await fetch(url);
     const data = await res.json();
     const categoryContainer = document.getElementById("our-product")
@@ -160,7 +181,7 @@ const filterByCategory=async(category)=>{
 
   })
 
-
+loadingSpinner(false)
 
 }
 

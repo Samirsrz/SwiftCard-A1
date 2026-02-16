@@ -4,14 +4,9 @@ navLinks.forEach(link => {
   link.classList.remove('bg-violet-100', 'text-violet-700', 'font-bold');
 });
 
-const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-navLinks.forEach(link => {
-  const linkHref = link.getAttribute('href');
-  
-  if (linkHref === currentPage) {
-    link.classList.add('bg-violet-100', 'text-violet-700', 'font-bold');
-  }
+const homeLinks = document.querySelectorAll('a[href="index.html"]');
+homeLinks.forEach(link => {
+  link.classList.add('bg-violet-100', 'text-violet-700', 'font-bold');
 });
 
 console.log("THis is from JS");
